@@ -1,0 +1,13 @@
+{
+  "app_name": "Restaurant",
+  "app_mode": "debug",
+  "app_host": "127.0.0.1",
+  "app_port": "9000",
+  "sms": {
+    "sign_name": "",
+    "template_code": "",
+    "app_key": "",
+    "app_secret": "",
+    "region_id": ""
+  }
+}

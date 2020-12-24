@@ -3,6 +3,7 @@ package main
 import (
 	"Restaurant/controller"
 	"Restaurant/tool"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,5 +20,8 @@ func main() {
 	}
 	app := gin.Default()
 	registerRouter(app)
+	if _, err := tool.OrmEngine(config);err!=nil{
+		fmt.Println(err.Error())
+	}
 	app.Run(config.AppHost + ":" + config.AppPort)
 }

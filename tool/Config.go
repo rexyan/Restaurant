@@ -7,20 +7,32 @@ import (
 )
 
 type Config struct {
-	AppName string 		`json:"app_name"`
-	AppMode string 		`json:"app_mode"`
-	AppHost string 		`json:"app_host"`
-	AppPort string 		`json:"app_port"`
-	Sms SmsConfig 		 `json:"sms"`
+	AppName  string         `json:"app_name"`
+	AppMode  string         `json:"app_mode"`
+	AppHost  string         `json:"app_host"`
+	AppPort  string         `json:"app_port"`
+	Sms      SmsConfig      `json:"sms"`
+	DataBase DataBaseConfig `json:"database"`
 }
 
 type SmsConfig struct {
-	SignName string 	`json:"sign_name"`
+	SignName     string `json:"sign_name"`
 	TemplateCode string `json:"template_code"`
-	RegionId string 	`json:"region_id"`
-	AppKey string 		`json:"app_key"`
-	AppSecret string 	`json:"app_secret"`
-	Schema string 		`json:"schema"`
+	RegionId     string `json:"region_id"`
+	AppKey       string `json:"app_key"`
+	AppSecret    string `json:"app_secret"`
+	Schema       string `json:"schema"`
+}
+
+type DataBaseConfig struct {
+	Driver   string `json:"driver"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Host     string `json:"host"`
+	Port     string `json:"port"`
+	DBName   string `json:"db_name"`
+	Charset  string `json:"charset"`
+	ShowSQL  bool   `json:"show_sql"`
 }
 
 var _config *Config = nil
@@ -43,4 +55,3 @@ func ParseConfig(path string) (*Config, error) {
 	}
 	return _config, nil
 }
-

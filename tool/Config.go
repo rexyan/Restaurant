@@ -11,7 +11,7 @@ type Config struct {
 	AppMode string 		`json:"app_mode"`
 	AppHost string 		`json:"app_host"`
 	AppPort string 		`json:"app_port"`
-	SmsConfig string 	`json:"sms"`
+	Sms SmsConfig 		 `json:"sms"`
 }
 
 type SmsConfig struct {
@@ -19,11 +19,17 @@ type SmsConfig struct {
 	TemplateCode string `json:"template_code"`
 	RegionId string 	`json:"region_id"`
 	AppKey string 		`json:"app_key"`
-	AppValue string 	`json:"app_value"`
+	AppSecret string 	`json:"app_secret"`
+	Schema string 		`json:"schema"`
+}
+
+var _config *Config = nil
+
+func GetConfig() *Config {
+	return _config
 }
 
 func ParseConfig(path string) (*Config, error) {
-	var _config *Config = nil
 	file, err := os.Open(path)
 	if err != nil {
 		panic(err)

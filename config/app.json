@@ -8,6 +8,7 @@
     "template_code": "",
     "app_key": "",
     "app_secret": "",
-    "region_id": ""
+    "region_id": "cn-hangzhou",
+    "scheme": "https"
   }
 }

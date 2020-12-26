@@ -1,4 +1,23 @@
 ### Go 云餐厅
+项目虽是 `Go 云餐厅` 但是实现和原版不一样，自己有封装和改进一些代码的写法和模块。例如：
+<br/>1. 短信验证码不是存储在数据库中，而是存储在 Redis 中
+```go
+redisStore.Set(phone, code, time.Minute*5)
+return esandSms.SendSms(phone, code)
+```
+<br/>2. 新增了一个 `BaseController`，其他 `Controller` 都继承它，里面封装了 `BuildResponse` 等方法。
+```go
+//BuildResponse
+func BuildResponse(context *gin.Context, HttpStatus int, MessageCode string, Data interface{}) {
+	requestId, _ := context.Get("requestId") // 中间件请求之前设置 requestId，返回中携带 
+	context.JSON(HttpStatus, gin.H{
+		"data":        Data,
+		"message":     enums.ErrorMessage[MessageCode],
+		"return_code": MessageCode,
+		"response_id": requestId,
+	})
+}
+```
 
 #### 后端 
 - gin

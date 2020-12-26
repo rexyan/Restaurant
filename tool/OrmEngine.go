@@ -4,6 +4,7 @@ import (
 	"Restaurant/model"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
+	"log"
 )
 
 // 抛出全局 DBEngine
@@ -13,14 +14,15 @@ type Orm struct {
 	*xorm.Engine
 }
 
-func OrmEngine(config *Config) (*Orm, error) {
+func OrmEngine() (*Orm, error) {
 	// 获取数据库相关配置
-	dbConfig := config.DataBase
+	dbConfig := GetConfig().DataBase
 	// 拼接连接地址
 	conn := dbConfig.User + ":" + dbConfig.Password + "@tcp(" + dbConfig.Host + ":" + dbConfig.Port + ")/" + dbConfig.DBName + "?charset=" + dbConfig.Charset
 	// 获取新 Engine
 	engine, err := xorm.NewEngine(dbConfig.Driver, conn)
 	if err != nil {
+		log.Println(err.Error())
 		return nil, err
 	}
 	// 设置显示 SQL
@@ -28,6 +30,7 @@ func OrmEngine(config *Config) (*Orm, error) {
 
 	// 根据 Model 逆向创建数据库表
 	if err := engine.Sync2(new(model.SmsCode)); err != nil {
+		log.Println(err.Error())
 		return nil, err
 	}
 

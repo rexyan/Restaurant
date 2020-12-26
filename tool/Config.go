@@ -3,6 +3,7 @@ package tool
 import (
 	"bufio"
 	"encoding/json"
+	"log"
 	"os"
 )
 
@@ -13,15 +14,13 @@ type Config struct {
 	AppPort  string         `json:"app_port"`
 	Sms      SmsConfig      `json:"sms"`
 	DataBase DataBaseConfig `json:"database"`
+	Redis    RedisConfig    `json:"redis"`
 }
 
 type SmsConfig struct {
-	SignName     string `json:"sign_name"`
-	TemplateCode string `json:"template_code"`
-	RegionId     string `json:"region_id"`
-	AppKey       string `json:"app_key"`
-	AppSecret    string `json:"app_secret"`
-	Schema       string `json:"schema"`
+	TemplateID string `json:"template_id"`
+	AppCode    string `json:"app_code"`
+	URL        string `json:"url"`
 }
 
 type DataBaseConfig struct {
@@ -35,23 +34,33 @@ type DataBaseConfig struct {
 	ShowSQL  bool   `json:"show_sql"`
 }
 
-var _config *Config = nil
+type RedisConfig struct {
+	Addr     string `json:"addr"`
+	Password string `json:"password"`
+	DB       int	`json:"db"`
+	Port     string `json:"port"`
+	Prefix   string `json:"prefix"`
+}
+
+var config *Config = nil
 
 func GetConfig() *Config {
-	return _config
+	return config
 }
 
 func ParseConfig(path string) (*Config, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		panic(err)
+		log.Println(err.Error())
+		return nil, err
 	}
 	defer file.Close()
 
 	reader := bufio.NewReader(file)
 	decoder := json.NewDecoder(reader)
-	if err := decoder.Decode(&_config); err != nil {
+	if err := decoder.Decode(&config); err != nil {
+		log.Println(err.Error())
 		return nil, err
 	}
-	return _config, nil
+	return config, nil
 }

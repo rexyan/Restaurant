@@ -2,8 +2,8 @@ package main
 
 import (
 	"Restaurant/controller"
+	"Restaurant/middleware"
 	"Restaurant/tool"
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,15 +13,23 @@ func registerRouter(engine *gin.Engine) {
 	new(controller.MemberController).Router(engine)
 }
 
+// middleware
+func registerMiddleware(engine *gin.Engine)  {
+	engine.Use(middleware.ResponseMiddleware())
+}
+
+// redis
+func registerDB()  {
+	tool.OrmEngine()
+	tool.InitRedisStore()
+}
+
 func main() {
-	config, err := tool.ParseConfig("./config/app.json")
-	if err != nil {
-		panic(err.Error())
-	}
+	// parse config
+	config, _ := tool.ParseConfig("./config/app.json")
 	app := gin.Default()
+	registerMiddleware(app)
 	registerRouter(app)
-	if _, err := tool.OrmEngine(config);err!=nil{
-		fmt.Println(err.Error())
-	}
+	registerDB()
 	app.Run(config.AppHost + ":" + config.AppPort)
 }

@@ -2,10 +2,10 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type HelloController struct {
+	BaseController
 }
 
 func (hello *HelloController) Router(engine *gin.Engine) {
@@ -13,7 +13,5 @@ func (hello *HelloController) Router(engine *gin.Engine) {
 }
 
 func (hello *HelloController) Hello(context *gin.Context) {
-	context.JSON(http.StatusOK, gin.H{
-		"message": "Hi Restaurant!",
-	})
+	BuildSuccessResponse(context,"health")
 }

@@ -3,17 +3,17 @@ package dao
 import (
 	"Restaurant/model"
 	"Restaurant/tool"
-	"fmt"
+	"log"
 )
 
 type MemberDao struct {
 	*tool.Orm
 }
 
-func (md *MemberDao) AddSmsCode(sms model.SmsCode) int64{
-	rows, err := md.InsertOne(&sms)
+func (md *MemberDao) AddSmsCode(member model.Member) int64{
+	rows, err := md.InsertOne(&member)
 	if err!= nil{
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	}
 	return rows
 }

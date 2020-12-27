@@ -16,6 +16,7 @@ func registerRouter(engine *gin.Engine) {
 // middleware
 func registerMiddleware(engine *gin.Engine)  {
 	engine.Use(middleware.ResponseMiddleware())
+	engine.Use(middleware.Cors())
 }
 
 // redis

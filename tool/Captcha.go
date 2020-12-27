@@ -14,7 +14,7 @@ type ConfigJsonBody struct {
 var store = base64Captcha.DefaultMemStore
 
 func GenerateCaptcha() (string, string) {
-	driver := base64Captcha.DefaultDriverDigit
+	driver := base64Captcha.NewDriverDigit(50, 120, 4, 0.7, 50)
 	c := base64Captcha.NewCaptcha(driver, store)
 	id, b64s, err := c.Generate()
 	if err != nil {

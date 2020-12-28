@@ -3,6 +3,7 @@ package controller
 import (
 	"Restaurant/dao"
 	"Restaurant/enums"
+	"Restaurant/middleware"
 	"Restaurant/model"
 	"Restaurant/service"
 	"Restaurant/tool"
@@ -19,7 +20,8 @@ func (mc *MemberController) Router(engine *gin.Engine) {
 	engine.GET("/api/sendSms", mc.sendSmsCode)
 	engine.POST("/api/smsLogin", mc.smsLogin)
 	engine.GET("/api/captcha", mc.captcha)
-	engine.GET("/api/login", mc.login)
+	engine.POST("/api/login", mc.login)
+	engine.POST("/api/uploadAvatar", mc.uploadAvatar, middleware.LoginRequiredMiddleware())
 }
 
 //sendSmsCode 发送验证码
@@ -55,7 +57,7 @@ func (mc *MemberController) smsLogin(context *gin.Context) {
 	}
 	memberDao := dao.MemberDao{Orm: tool.DBEngine}
 	member := memberDao.GetMemberByMobile(phone)
-	if member == nil {
+	if member.Id == 0 {
 		member = &model.Member{
 			UserName:     phone,
 			Mobile:       phone,
@@ -65,6 +67,8 @@ func (mc *MemberController) smsLogin(context *gin.Context) {
 		}
 		member = memberDao.AddMember(member)
 	}
+	sessionValue := map[string]interface{}{"Mobile": phone, "Avatar": member.Avatar, "Balance": member.Balance, "City": member.City}
+	tool.SetSession(phone, sessionValue)
 	BuildResponse(context, http.StatusOK, enums.SUCCESS, member)
 }
 
@@ -76,6 +80,27 @@ func (mc *MemberController) captcha(context *gin.Context) {
 
 // login 账号密码登陆
 func (mc *MemberController) login(context *gin.Context) {
-	id, b64s := tool.GenerateCaptcha()
-	BuildResponse(context, http.StatusOK, enums.SUCCESS, map[string]string{"id": id, "b64s": b64s})
+	requestData := RequestData(context)
+	phone := requestData["name"]
+	pwd := requestData["pwd"]
+	captchaId := requestData["id"]
+	captchaValue := requestData["value"]
+	if !tool.CheckCaptcha(captchaId, captchaValue) {
+		BuildResponse(context, http.StatusBadRequest, enums.CaptchaError, "captcha code error!")
+		return
+	}
+	memberService := service.MemberService{}
+	member := memberService.GetMemberByMobile(phone)
+	if !memberService.MemberExist(member) || !memberService.CheckMemberPassword(member, pwd) {
+		BuildResponse(context, http.StatusBadRequest, enums.UnregisteredOrPasswordError, "phone number unregistered or password error!")
+		return
+	}
+	sessionValue := map[string]interface{}{"Mobile": phone, "Avatar": member.Avatar, "Balance": member.Balance, "City": member.City}
+	tool.SetSession(phone, sessionValue)
+	BuildResponse(context, http.StatusOK, enums.SUCCESS, member)
+}
+
+// uploadAvatar 上传头像
+func (mc *MemberController) uploadAvatar(context *gin.Context) {
+
 }

@@ -24,8 +24,8 @@ func GenerateCaptcha() (string, string) {
 	return id, b64s
 }
 
-func CheckCaptcha(configJsonBody ConfigJsonBody) bool {
-	if store.Verify(configJsonBody.Id, configJsonBody.VerifyValue, true) {
+func CheckCaptcha(id string, value string) bool {
+	if store.Verify(id, value, true) {
 		return true
 	}
 	return false

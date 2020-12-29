@@ -3,7 +3,6 @@ package controller
 import (
 	"Restaurant/dao"
 	"Restaurant/enums"
-	"Restaurant/middleware"
 	"Restaurant/model"
 	"Restaurant/service"
 	"Restaurant/tool"
@@ -21,7 +20,6 @@ func (mc *MemberController) Router(engine *gin.Engine) {
 	engine.POST("/api/smsLogin", mc.smsLogin)
 	engine.GET("/api/captcha", mc.captcha)
 	engine.POST("/api/login", mc.login)
-	engine.POST("/api/uploadAvatar", mc.uploadAvatar, middleware.LoginRequiredMiddleware())
 }
 
 //sendSmsCode 发送验证码
@@ -98,9 +96,4 @@ func (mc *MemberController) login(context *gin.Context) {
 	sessionValue := map[string]interface{}{"Mobile": phone, "Avatar": member.Avatar, "Balance": member.Balance, "City": member.City}
 	tool.SetSession(phone, sessionValue)
 	BuildResponse(context, http.StatusOK, enums.SUCCESS, member)
-}
-
-// uploadAvatar 上传头像
-func (mc *MemberController) uploadAvatar(context *gin.Context) {
-
 }

@@ -11,6 +11,7 @@ import (
 func registerRouter(engine *gin.Engine) {
 	new(controller.HelloController).Router(engine)
 	new(controller.MemberController).Router(engine)
+	new(controller.FoodCategoryController).Router(engine)
 }
 
 // middleware

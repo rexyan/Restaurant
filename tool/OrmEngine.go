@@ -29,7 +29,11 @@ func OrmEngine() (*Orm, error) {
 	engine.ShowSQL(dbConfig.ShowSQL)
 
 	// 根据 Model 逆向创建数据库表
-	if err := engine.Sync2(new(model.Member)); err != nil {
+	if err := engine.Sync2(
+		new(model.Member),
+		new(model.FoodCategory),
+		new(model.Shop),
+		); err != nil {
 		log.Println(err.Error())
 		return nil, err
 	}

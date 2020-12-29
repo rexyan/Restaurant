@@ -7,6 +7,7 @@ const (
 	CaptchaError  string = "30013"
 	UnregisteredOrPasswordError  string = "30014"
 	Unauthorized  string = "30015"
+	PositionError  string = "30016"
 )
 
 var ErrorMessage = map[string]string{
@@ -16,4 +17,5 @@ var ErrorMessage = map[string]string{
 	CaptchaError:  "验证码错误",
 	UnregisteredOrPasswordError: "未注册或者密码错误",
 	Unauthorized: "未登录",
+	PositionError: "位置信息错误",
 }

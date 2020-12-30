@@ -33,6 +33,8 @@ func OrmEngine() (*Orm, error) {
 		new(model.Member),
 		new(model.FoodCategory),
 		new(model.Shop),
+		new(model.Service),
+		new(model.ShopService),
 		); err != nil {
 		log.Println(err.Error())
 		return nil, err

@@ -65,9 +65,10 @@ func LoginRequiredMiddleware() gin.HandlerFunc {
 #### TODO
 - [ ] 数据库支持 SQLite
 - [ ] 前后端 Docker 打包
+- [ ] Antd Pro v5 + gin 实现管理控台
 
 #### 文档
-- 接口文档
-- 原文档 [HelloGin](https://github.com/rexyan/HelloGin)
+- 接口文档   
+- 原文档    [HelloGin](https://github.com/rexyan/HelloGin)
 
 #### 预览

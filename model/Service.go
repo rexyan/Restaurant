@@ -1,6 +1,6 @@
 package model
 
-//服务结构体定义
+// 商家服务表
 type Service struct {
 	//id
 	Id int64 `xorm:"pk autoincr" json:"id"`

@@ -34,4 +34,6 @@ type Shop struct {
 	DeliveryFee int32 `xorm:"int" json:"delivery_fee"`
 	//营业时间
 	OpeningHours string `xorm:"varchar(20)" json:"opening_hours"`
+	// 支持的服务 (不同步到数据库)
+	Supports []Service `xorm:""`
 }

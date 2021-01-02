@@ -28,3 +28,13 @@ func (sp *ShopDao) SearchShop(longitude, latitude float64, keyword string) []mod
 	}
 	return shops
 }
+
+// GetShopService 查询商家拥有的服务
+func (sp *ShopDao) GetShopService(shopId int64) []model.Service {
+	var services []model.Service
+	err := sp.Table("service").Join("inner", "shop_service", "service.id=shop_service.service_id and shop_service.ship=?", shopId).Find(&services)
+	if err != nil {
+		return nil
+	}
+	return services
+}
